@@ -1,16 +1,18 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Mulish,Playwrite_US_Trad} from "next/font/google";
 import "./globals.css";
-import LayoutMenu from "../components/Layout"
+import ConditionalLayout from "../components/ConditionalLayout";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+
+const mulish = Mulish({
+  subsets: ['latin'],
+  variable: '--font-mulish',
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const playwrite = Playwrite_US_Trad({
+  subsets: ['latin'],
+  variable: '--font-playwrite',
 });
+
 
 export const metadata = {
   title: "TAOWR",
@@ -21,12 +23,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${mulish.variable} ${playwrite.variable} antialiased`}
       >
-        <div className="flex min-h-screen">
-          <LayoutMenu />
-          <main className="flex-1 p-6">{children}</main> {/* 👈 Page content */}
-        </div>
+        <ConditionalLayout>{children}</ConditionalLayout>
       </body>
     </html>
   );
