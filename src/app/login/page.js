@@ -1,6 +1,13 @@
+'use client';
+
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 export default function Login(){
+  const formAction= ()=>{
+    console.log("Form submitted");
+  }
   return (
     <div className="flex h-screen w-full">
         {/* Left Section: Logo */}
@@ -22,18 +29,12 @@ export default function Login(){
         <div className="w-1/2 p-8 flex items-center justify-center bg-white">
           <div className="w-full max-w-md">
             <h2 className="mb-12 text-2xl font-bold text-gray-800">Login to your account</h2>
-            <form>
-              {/* <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-600">Email</label>
-                <input type="email" id="email" className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email" />
-              </div> */}
-              {/* <div className="mb-6">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-600">Password</label>
-                <input type="password" id="password" className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password" />
-              </div> */}
-              <button type="submit" className="w-full px-4 py-4 text-white bg-primary rounded-md hover:bg-hover-primary focus:outline-none focus:ring-2 focus:ring-primary font-bold mb-8">Continue with Google</button>
+            <form action={formAction}>
+              <button type="submit" className="flex items-center justify-center w-full px-4 py-4 text-white bg-primary rounded-md hover:bg-hover-primary focus:outline-none focus:ring-2 focus:ring-primary font-bold mb-8">
+                <FontAwesomeIcon icon={faGoogle} className='w-5 mx-5' />
+                Continue with Google
+              </button>
             </form>
-            <label className="block text-sm font-medium my-3 text-blue-600 underline">Forgot password?</label>
           </div>
         </div>
       
