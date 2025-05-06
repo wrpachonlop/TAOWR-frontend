@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 export default function Login(){
-  const formAction= ()=>{
-    console.log("Form submitted");
+  const formAction= (e)=>{
+    console.log("Form submitted", e);
   }
   return (
     <div className="flex h-screen w-full">
