@@ -1,14 +1,20 @@
 'use client';
-import React from 'react';
+import React, {useState} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
-
-
-
 export default function EmployeesPage() {  
-  const handleClick = (name) => {
-    console.log("Botón presionado",name);
-  };
+
+  
+    const [mostrarMenu, setMostrarMenu]=useState(null);
+    const handleClick = (id) => {
+      setMostrarMenu(prev => (prev === id ? null : id));
+      console.log("Botón presionado",name);
+    };
+    const seleccionarOpcion = (opcion) => () => {
+      console.log('seleccionaste: ${opcion}');
+      setMostrarMenu(false);
+    };
+  
   const employees=[ //Estoy creando las tablas con la información de los empleados
     { id: 1, name:'Niko Montemayor', number:'niko@theartofwildroots.com', role: 'Owner', status: 'Active'},
     { id: 2, name:'Lourdes Hugo', number:'Lou@theartofwildroots.com', role: 'CEO', status: 'Active'},
@@ -35,9 +41,33 @@ export default function EmployeesPage() {
                   <td className="py-2 px-4 border-b">{user.role}</td>
                   <td className="py-2 px-4 border-b">{user.status}</td>
                   <td className="py-2 px-4 border-b"> 
-                    <button onClick={()=>handleClick(user.name)} className="white text-black px-4 py-2 rounded">
+                    <button onClick={()=>handleClick(user.id)} className="white text-black px-4 py-2 rounded">
                       <FontAwesomeIcon icon={faEllipsisVertical} />
                     </button>
+                    {mostrarMenu === user.id && (
+                      <div className='mt-2 bg-white border rounded shadow-lg absolute z-10'>
+                        <ul className="text-sm text-gray-700">
+                          <li
+                            onClick={seleccionarOpcion('Ver perfil')}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            >
+                              Ver Perfil
+                          </li>
+                          <li
+                            onClick={seleccionarOpcion('Inactivar')}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            >
+                              Inactivar
+                          </li>
+                          <li
+                            onClick={seleccionarOpcion('Saludos')}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            >
+                              Saludos
+                          </li>
+                        </ul>
+                      </div>
+                     )}  
                   </td>
                 </tr>
               )         
