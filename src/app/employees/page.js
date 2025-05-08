@@ -4,14 +4,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 export default function EmployeesPage() {  
 
-  
+    const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null);
+    const [mostrarModal, setMostrarModal] = useState(false);
     const [mostrarMenu, setMostrarMenu]=useState(null);
     const handleClick = (id) => {
       setMostrarMenu(prev => (prev === id ? null : id));
-      console.log("Botón presionado",name);
+      console.log(`Botón presionado ${id}`);
     };
-    const seleccionarOpcion = (opcion) => () => {
-      console.log('seleccionaste: ${opcion}');
+    const seleccionarOpcion = (opcion, empleado) => () => {
+      console.log('Opción:', opcion);
+      console.log('Empleado:', empleado);
+      if (opcion==='Ver Perfil'){
+        setEmpleadoSeleccionado(empleado);
+        setMostrarModal(true);
+      }
+      console.log(`seleccionaste: ${opcion}`);
       setMostrarMenu(false);
     };
   
@@ -48,19 +55,19 @@ export default function EmployeesPage() {
                       <div className='mt-2 bg-white border rounded shadow-lg absolute z-10'>
                         <ul className="text-sm text-gray-700">
                           <li
-                            onClick={seleccionarOpcion('Ver perfil')}
+                            onClick={seleccionarOpcion('Ver Perfil', user)}
                             className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                             >
                               Ver Perfil
                           </li>
                           <li
-                            onClick={seleccionarOpcion('Inactivar')}
+                            onClick={seleccionarOpcion('Inactivar', user)}
                             className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                             >
                               Inactivar
                           </li>
                           <li
-                            onClick={seleccionarOpcion('Saludos')}
+                            onClick={seleccionarOpcion('Saludos', user)}
                             className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                             >
                               Saludos
@@ -75,6 +82,23 @@ export default function EmployeesPage() {
             </tbody>
           </table>
         </div>
+          {mostrarModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded shadow-lg w-96 relative">
+              <h2 className="text-xl font-bold mb-4">Perfil del Empleado</h2>
+              <p><strong>Nombre:</strong> {empleadoSeleccionado.name}</p>
+              <p><strong>Correo:</strong> {empleadoSeleccionado.number}</p>
+              <p><strong>Rol:</strong> {empleadoSeleccionado.role}</p>
+              <p><strong>Estado:</strong> {empleadoSeleccionado.status}</p>
+              <button
+                onClick={() => setMostrarModal(false)}
+                className="mt-4 bg-indigo-500 text-white px-4 py-2 rounded"
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        )}        
       </div>
       );
 };
