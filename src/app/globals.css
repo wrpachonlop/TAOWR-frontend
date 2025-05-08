@@ -25,7 +25,11 @@
     --primary: #C42E82;
   }
 }
-
+html,
+body,
+#root {
+  height: 100%;
+}
 body {
   background: var(--background);
   color: var(--foreground);
