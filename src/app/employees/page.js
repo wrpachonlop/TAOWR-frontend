@@ -32,12 +32,12 @@ export default function EmployeesPage() {
     { id: 2, CreatedAt : '2025-05-03', UpdatedAt: '2025-05-03',DeletedAt: null, FullName:'Lourdes Hugo', Email:'Lou@theartofwildroots.com', Phone:'123-456-7890', Address: '123 Main St' , PostalCode: 'V5K0A1' , DriversLicense: 'D1234567' , SIN: '123456789' , BirthDate: '1990-01-01' , IsAdmin: false , IsActive: false ,StartDate: "2024-05-01" , JobTitle: 'CEO', TypeContract: 'Full-time', Salary: 50000, InstitutionNo: "001",AccountNo: "123456789",TransitNo: "00011",BankAccountName: "John Doe",Tools: [],Trucks: [],EmergencyContacts: [{ID: 1,CreatedAt: "2025-05-03T17:12:18.716121Z",UpdatedAt: "2025-05-03T17:12:18.716121Z",DeletedAt: null,EmployeeID: 1,Name: "Jane Doe", Phone: "987-654-3210",Address: "456 Another Street",Relationship: "Spouse"}]},
   ];      
     return (
-      <div>
-        <h1 className="text-2xl font-bold mb-4">Employees</h1>
-          <div className="overflow-x-auto">  {/* permite hacer scroll si la tabla es muy ancha */}
+      <div className="p-8 m-8">
+        <h1 className="text-2xl font-bold mb-4 mt-6">Employees</h1>
+          <div className="overflow-x-auto p-4">  {/* permite hacer scroll si la tabla es muy ancha */}
           <table className="min-w-full bg-white border border-gray-200">{/*  crea la tabla con todo el ancho disponible con fondo blanco y borde gris*/}
-            <thead>{/*  encabezado de la tabla */}
-              <tr>
+            <thead className="bg-foreground">{/*  encabezado de la tabla */}
+              <tr className='text-background'>
                 <th className="py-2 px-4 border-b">Full Name</th>{/*  py - padding vertical y px - padding horizontal y border-b hace una línea inferior */}
                 <th className="py-2 px-4 border-b">Email</th>
                 <th className="py-2 px-4 border-b">Job Title</th>
@@ -100,6 +100,7 @@ export default function EmployeesPage() {
               <p><strong>Transit Number:</strong> {empleadoSeleccionado.TransitNo}</p>
               <p><strong>Account Number:</strong> {empleadoSeleccionado.AccountNo}</p>
               <p><strong>Emergency Contacts:</strong></p>
+              <table>
               <thead>{/*  encabezado de la tabla */}
               <tr>
                 <th className="py-2 px-4 border-b">Full Name</th>{/*  py - padding vertical y px - padding horizontal y border-b hace una línea inferior */}
@@ -110,7 +111,7 @@ export default function EmployeesPage() {
             </thead>
             <tbody>
               {empleadoSeleccionado.EmergencyContacts.map((emergency) =>(
-                <tr key={emergency.id} className="text-center">{/* En React, cuando haces listas (.map() para crear elementos repetidos como filas de tabla), necesitas darle una key única a cada elemento. Key ayuda a identificar cada fila de manera única (cómo el id del usuario)*/}
+                <tr key={emergency.ID} className="text-center">{/* En React, cuando haces listas (.map() para crear elementos repetidos como filas de tabla), necesitas darle una key única a cada elemento. Key ayuda a identificar cada fila de manera única (cómo el id del usuario)*/}
                 <td className="py-2 px-4 border-b">{emergency.Name}</td>
                 <td className="py-2 px-4 border-b">{emergency.Phone}</td>
                 <td className="py-2 px-4 border-b">{emergency.Address}</td>
@@ -119,6 +120,7 @@ export default function EmployeesPage() {
               ) )
               }
             </tbody>
+            </table>
               <button
                 onClick={() => setMostrarModal(false)}
                 className="mt-4 bg-indigo-500 text-white px-4 py-2 rounded"
