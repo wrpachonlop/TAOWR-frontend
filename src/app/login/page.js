@@ -3,19 +3,21 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { signIn } from "next-auth/react";
 
 
 export default function Login(){
-  const handleClick = () => {
+  const handleClick = async () => {
     console.log("Button clicked chuchi marcela");
+    await signIn("google");
   };
-  const employees =[{}];
+
   return (
     <div className="flex h-screen w-full">
         {/* Left Section: Logo */}
-        <button className="absolute top-4 left-4 text-gray-500 hover:text-gray-700 focus:outline-none" onClick={handleClick}>
+        {/* <button className="absolute top-4 left-4 text-gray-500 hover:text-gray-700 focus:outline-none" onClick={handleClick}>
           Carolina aqui estoy 
-        </button>
+        </button> */}
         <div
           className="w-1/2 relative flex items-center justify-center bg-cover bg-center background-image"
         >
@@ -36,7 +38,6 @@ export default function Login(){
             <h2 className="mb-12 text-2xl font-bold text-gray-800">Login to your account</h2>
             
               <button 
-                type="submit" 
                 className="flex items-center justify-center w-full px-4 py-4 text-white bg-primary rounded-md hover:bg-hover-primary focus:outline-none focus:ring-2 focus:ring-primary font-bold mb-8"
                 onClick={handleClick}
                 >
