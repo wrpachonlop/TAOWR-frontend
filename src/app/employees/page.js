@@ -4,9 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 export default function EmployeesPage() {  
     const optionsForMenu = [
-      {value:1, name: 'Ver Perfil'},
-      {value:2, name: 'Desactivar'},
-      {value:3, name: 'Editar'}
+      {value:1, name: 'View Profile'},
+      {value:2, name: 'Deactivate'},
+      {value:3, name: 'Edit'}
     ]
     
     const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null);
@@ -36,13 +36,13 @@ export default function EmployeesPage() {
         <h1 className="text-2xl font-bold mb-4 mt-6">Employees</h1>
           <div className="overflow-x-auto p-4">  {/* permite hacer scroll si la tabla es muy ancha */}
           <table className="min-w-full bg-white border border-gray-200">{/*  crea la tabla con todo el ancho disponible con fondo blanco y borde gris*/}
-            <thead className="bg-foreground">{/*  encabezado de la tabla */}
+            <thead className="bg-foreground h-1/2 text-left">{/*  encabezado de la tabla */}
               <tr className='text-background'>
-                <th className="py-2 px-4 border-b">Full Name</th>{/*  py - padding vertical y px - padding horizontal y border-b hace una línea inferior */}
-                <th className="py-2 px-4 border-b">Email</th>
-                <th className="py-2 px-4 border-b">Job Title</th>
-                <th className="py-2 px-4 border-b">Status</th>
-                <th className="py-2 px-4 border-b"></th>
+                <th className="py-2 px-6 border-b">Full Name</th>{/*  py - padding vertical y px - padding horizontal y border-b hace una línea inferior */}
+                <th className="py-2 px-6 border-b">Email</th>
+                <th className="py-2 px-6 border-b">Job Title</th>
+                <th className="py-2 px-6 border-b">Status</th>
+                <th className="border-b"></th>
               </tr>
             </thead>
             <tbody>
@@ -82,7 +82,7 @@ export default function EmployeesPage() {
           {mostrarModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded shadow-lg  relative">
-              <h2 className="text-xl font-bold mb-4">Perfil del Empleado</h2>
+              <h2 className="text-xl font-bold mb-4">Employee Profile</h2>
               <p><strong>Name:</strong> {empleadoSeleccionado.FullName}</p>
               <p><strong>Email:</strong> {empleadoSeleccionado.Email}</p>
               <p><strong>Job Title:</strong> {empleadoSeleccionado.JobTitle}</p>
@@ -125,7 +125,7 @@ export default function EmployeesPage() {
                 onClick={() => setMostrarModal(false)}
                 className="mt-4 bg-indigo-500 text-white px-4 py-2 rounded"
               >
-                Cerrar
+                Close
               </button>
             </div>
           </div>
