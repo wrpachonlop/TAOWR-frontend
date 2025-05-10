@@ -4,20 +4,28 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 
 export default function Login(){
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/"); // Redirect to homepage if already logged in
+    }
+  }, [status]);
+
   const handleClick = async () => {
-    console.log("Button clicked chuchi marcela");
+
     await signIn("google");
   };
 
   return (
     <div className="flex h-screen w-full">
-        {/* Left Section: Logo */}
-        {/* <button className="absolute top-4 left-4 text-gray-500 hover:text-gray-700 focus:outline-none" onClick={handleClick}>
-          Carolina aqui estoy 
-        </button> */}
         <div
           className="w-1/2 relative flex items-center justify-center bg-cover bg-center background-image"
         >

@@ -10,7 +10,10 @@ export default NextAuth({
   ],
   callbacks: {
     async signIn({ account, profile }) {
-      return profile?.email?.endsWith("@wildroots.com");
+      return profile?.email?.endsWith("@wildrootscompany.com");
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl; 
     },
   },
 });
