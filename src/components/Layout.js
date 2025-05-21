@@ -1,10 +1,8 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHouse,
   faTruck,
   faUsers,
   faToolbox,
-  faRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
 import SidebarItem from './SideBarItem';
 import LogoutButton from './LogoutButton';

@@ -38,8 +38,11 @@ body {
   font-family: 'Playwrite US Trad', serif;
 }
 .background-image {
-  background-image: url('/images/background.png');
+  background-image: url('../../public/images/background.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+.logo{
+  background-image: url('../../public/images/logo.png');
 }
