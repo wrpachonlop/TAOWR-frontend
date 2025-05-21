@@ -2,6 +2,7 @@
 import React, {useState} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisVertical, faPlus } from '@fortawesome/free-solid-svg-icons'
+import axios from "axios";
 export default function EmployeesPage() {  
     const optionsForMenu = [
       {value:1, name: 'View Profile'},
@@ -11,10 +12,34 @@ export default function EmployeesPage() {
     
     const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null);
     const [mostrarModal, setMostrarModal] = useState(false);
+    const [nuevoeModal, setNuevoeModal] = useState(false);
     const [mostrarMenu, setMostrarMenu]=useState(null);
+    const [formData, setFormData] = useState({
+      fullName:"",
+      email:"",
+    });
     const handleClick = (id) => {
       setMostrarMenu(prev => (prev === id ? null : id));
       console.log(`Botón presionado ${id}`);
+    };
+    const handleChange = (e) => {
+      setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+    };
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      try {
+      const response = await axios.post("https://taowr-backend.onrender.com", formData);
+      console.log("Respuesta del servidor:", response.data);
+      alert("Empleado guardado exitosamente");
+      setShowModal(false);
+      } catch (error) {
+      console.error("Error al guardar:", error);
+      alert("Hubo un error al guardar el empleado");
+      }
     };
     const seleccionarOpcion = (idOption, empleado) => () => {
       console.log('Opción:', idOption);
@@ -35,10 +60,66 @@ export default function EmployeesPage() {
       <div className="p-8 m-8">
         <h1 className="text-2xl font-bold mb-4 mt-6">Employees</h1>
           <div className='flex justify-end p-4'>
-              <button onClick={()=>alert('Hiciste Click')} className=" block text-left bg-primary font-thin text-white px-3 py-1.5 rounded">
+              <button onClick={()=> setNuevoeModal(true)} className=" block text-left bg-primary font-thin text-white px-3 py-1.5 rounded">
                 <span className='pr-2'><FontAwesomeIcon icon={faPlus} /></span> New Employee
               </button>
           </div>
+            {nuevoeModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+                  <h2 className="text-lg font-semibold mb-4">Nuevo Empleado</h2>
+                        <form onSubmit={(e) => {
+                        handleSubmit(e);
+                        setNuevoeModal(false);
+                      }}>
+                          <div className="mb-4">
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Full Name
+                          </label>
+                          <input
+                            type="text"
+                            name="fullName"
+                            value={formData.fullName}
+                            onChange={handleChange}
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                            required
+                          />
+                        </div>
+
+                        <div className="mb-4">
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Email
+                          </label>
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                            required
+                          />
+                        </div>
+
+                        <div className="flex justify-end space-x-2">
+                          <button
+                            type="button"
+                            onClick={() => setNuevoeModal(false)}
+                            className="px-4 py-2 bg-gray-300 text-gray-700 rounded"
+                          >
+                            Cancelar
+                          </button>
+
+                          <button
+                            type="submit"
+                            className="px-4 py-2 bg-primary text-white rounded"
+                          >
+                            Guardar
+                          </button>
+                        </div>
+                      </form>
+                </div>
+              </div>
+            )}
           <div className=" rounded-lg overflow-x-auto p-4">  {/* permite hacer scroll si la tabla es muy ancha */}
           <table className="min-w-full bg-white border border-gray-200 mt-8">{/*  crea la tabla con todo el ancho disponible con fondo blanco y borde gris*/}
             <thead className="bg-foreground h-1/2 text-left">{/*  encabezado de la tabla */}
