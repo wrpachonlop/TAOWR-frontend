@@ -1,20 +1,49 @@
 'use client';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
+import { faEllipsisVertical, faPlus } from '@fortawesome/free-solid-svg-icons'
+import axios from "axios";
 export default function EmployeesPage() {  
     const optionsForMenu = [
-      {value:1, name: 'Ver Perfil'},
-      {value:2, name: 'Desactivar'},
-      {value:3, name: 'Editar'}
+      {value:1, name: 'View Profile'},
+      {value:2, name: 'Deactivate'},
+      {value:3, name: 'Edit'}
     ]
     
     const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null);
     const [mostrarModal, setMostrarModal] = useState(false);
+    const [nuevoeModal, setNuevoeModal] = useState(false);
     const [mostrarMenu, setMostrarMenu]=useState(null);
+    const [employees, setEmployees] = useState([]);
+    const [formData, setFormData] = useState({
+      fullName:"", email:"", phone:"", address: "", postalCode: "", driversLicense: "", sin: "", birthDate: "" , isAdmin: "" , isActive: "" , startDate: "" , jobTitle: "", typeContract: "", salary: "", institutionNo: "", accountNo: "",transitNo: "",bankAccountName: "",
+
+    });
     const handleClick = (id) => {
       setMostrarMenu(prev => (prev === id ? null : id));
       console.log(`Botón presionado ${id}`);
+    };
+    const handleChange = (e) => {
+      setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+    };
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      try {
+      const response = await axios.post("https://taowr-backend.onrender.com/api/employees", formData);
+      console.log("Respuesta del servidor:", response.data);
+      alert("Empleado guardado exitosamente");
+      setNuevoeModal(false);
+      } catch (error) {
+      console.log("Error al guardar:", error);
+      alert("Hubo un error al guardar el empleado");
+      }
+      await axios.post("https://taowr-backend.onrender.com/api/employees", formData);
+      const updatedList = await axios.get ("https://taowr-backend.onrender.com/api/employees");
+      setEmployees(updatedList.data);
     };
     const seleccionarOpcion = (idOption, empleado) => () => {
       console.log('Opción:', idOption);
@@ -27,33 +56,191 @@ export default function EmployeesPage() {
       setMostrarMenu(false);
     };
   
-  const employees=[ //Estoy creando las tablas con la información de los empleados
+  /*const employees=[ //Estoy creando las tablas con la información de los empleados
     { id: 1, CreatedAt : '2025-05-03', UpdatedAt: '2025-05-03', DeletedAt: null, FullName:'Niko Montemayor', Email:'niko@theartofwildroots.com', Phone:'123-456-7890', Address: '123 Main St' , PostalCode: 'V5K0A1' , DriversLicense: 'D1234567' , SIN: '123456789' , BirthDate: '1990-01-01' , IsAdmin: false , IsActive: true , StartDate: "2024-05-01" , JobTitle: 'Owner', TypeContract: 'Full-time', Salary: 50000, InstitutionNo: "001", AccountNo: "123456789",TransitNo: "00011",BankAccountName: "John Doe",Tools: [], Trucks: [],EmergencyContacts: [{ID: 1,CreatedAt: "2025-05-03T17:12:18.716121Z",UpdatedAt: "2025-05-03T17:12:18.716121Z",DeletedAt: null,EmployeeID: 1,Name: "Jane Doe", Phone: "987-654-3210",Address: "456 Another Street",Relationship: "Spouse"}]},
-    { id: 2, CreatedAt : '2025-05-03', UpdatedAt: '2025-05-03',DeletedAt: null, FullName:'Lourdes Hugo', Email:'Lou@theartofwildroots.com', Phone:'123-456-7890', Address: '123 Main St' , PostalCode: 'V5K0A1' , DriversLicense: 'D1234567' , SIN: '123456789' , BirthDate: '1990-01-01' , IsAdmin: false , IsActive: false ,StartDate: "2024-05-01" , JobTitle: 'CEO', TypeContract: 'Full-time', Salary: 50000, InstitutionNo: "001",AccountNo: "123456789",TransitNo: "00011",BankAccountName: "John Doe",Tools: [],Trucks: [],EmergencyContacts: [{ID: 1,CreatedAt: "2025-05-03T17:12:18.716121Z",UpdatedAt: "2025-05-03T17:12:18.716121Z",DeletedAt: null,EmployeeID: 1,Name: "Jane Doe", Phone: "987-654-3210",Address: "456 Another Street",Relationship: "Spouse"}]},
-  ];      
+    { id: 2, CreatedAt : '2025-05-03', UpdatedAt: '2025-05-03',DeletedAt: null, FullName:'Lourdes Hugo', Email:'lou@theartofwildroots.com', Phone:'123-456-7890', Address: '123 Main St' , PostalCode: 'V5K0A1' , DriversLicense: 'D1234567' , SIN: '123456789' , BirthDate: '1990-01-01' , IsAdmin: false , IsActive: false ,StartDate: "2024-05-01" , JobTitle: 'CEO', TypeContract: 'Full-time', Salary: 50000, InstitutionNo: "001",AccountNo: "123456789",TransitNo: "00011",BankAccountName: "John Doe",Tools: [],Trucks: [],EmergencyContacts: [{ID: 1,CreatedAt: "2025-05-03T17:12:18.716121Z",UpdatedAt: "2025-05-03T17:12:18.716121Z",DeletedAt: null,EmployeeID: 1,Name: "Jane Doe", Phone: "987-654-3210",Address: "456 Another Street",Relationship: "Spouse"}]},
+  ];*/ 
+  useEffect(() =>{
+    const fetchEmployees = async()=> {
+      try {
+        const response = await axios.get("https://taowr-backend.onrender.com/api/employees");
+        setEmployees(response.data);
+      } catch (error){
+        console.log("Error al obtener empleados:", error);
+      }
+    };
+
+    fetchEmployees();
+  },[]
+  );  
+    console.log(employees);   
     return (
       <div className="p-8 m-8">
         <h1 className="text-2xl font-bold mb-4 mt-6">Employees</h1>
-          <div className="overflow-x-auto p-4">  {/* permite hacer scroll si la tabla es muy ancha */}
-          <table className="min-w-full bg-white border border-gray-200">{/*  crea la tabla con todo el ancho disponible con fondo blanco y borde gris*/}
-            <thead className="bg-foreground">{/*  encabezado de la tabla */}
+          <div className='flex justify-end p-4'>
+              <button onClick={()=> setNuevoeModal(true)} className=" block text-left bg-primary font-thin text-white px-3 py-1.5 rounded">
+                <span className='pr-2'><FontAwesomeIcon icon={faPlus} /></span> New Employee
+              </button>
+          </div>
+            {nuevoeModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-">
+                <div className="bg-white p-6 rounded shadow-lg w-full max-w-4xl">
+                  <h2 className="text-lg font-semibold mb-6">New Employee</h2>
+                        <form onSubmit={(e) => {
+                        handleSubmit(e);
+                        setNuevoeModal(false);
+                      }}>
+                          <div className="w-full my-10 grid grid-cols-2 gap-4">
+                            <div className='col-span-2'>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Full Name
+                            </label>
+                            <input
+                              type="text"
+                              name="fullName"
+                              value={formData.fullName}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>
+                          <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Email
+                          </label>
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                            required
+                          />
+                          </div>
+                           <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Phone Number
+                            </label>
+                            <input
+                              type="text"
+                              name="phone"
+                              value={formData.phone}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>                                               
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Address
+                            </label>
+                            <input
+                              type="text"
+                              name="address"
+                              value={formData.address}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Postal Code
+                            </label>
+                            <input
+                              type="text"
+                              name="postalCode"
+                              value={formData.postalCode}
+                              onChange={handleChange}
+                              className="w-1/2 border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>
+                           <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            SIN Number
+                            </label>
+                            <input
+                              type="text"
+                              name="sin"
+                              value={formData.sin}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>   
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Driver License Number
+                            </label>
+                            <input
+                              type="text"
+                              name="driverLicense"
+                              value={formData.driversLicense}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Birth date
+                            </label>
+                            <input
+                              type="text"
+                              name="birthDate"
+                              value={formData.birthDate}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="flex justify-end space-x-2">
+                          <button
+                            type="button"
+                            onClick={() => setNuevoeModal(false)}
+                            className="px-4 py-2 bg-gray-300 text-gray-700 rounded"
+                          >
+                            Cancel
+                          </button>
+
+                          <button
+                            type="submit"
+                            className="px-4 py-2 bg-primary text-white rounded"
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </form>
+                </div>
+              </div>
+            )}
+          <div className=" rounded-lg overflow-x-auto p-4">  {/* permite hacer scroll si la tabla es muy ancha */}
+          <table className="min-w-full bg-white border border-gray-200 mt-8">{/*  crea la tabla con todo el ancho disponible con fondo blanco y borde gris*/}
+            <thead className="bg-foreground h-1/2 text-left">{/*  encabezado de la tabla */}
               <tr className='text-background'>
-                <th className="py-2 px-4 border-b">Full Name</th>{/*  py - padding vertical y px - padding horizontal y border-b hace una línea inferior */}
-                <th className="py-2 px-4 border-b">Email</th>
-                <th className="py-2 px-4 border-b">Job Title</th>
-                <th className="py-2 px-4 border-b">Status</th>
-                <th className="py-2 px-4 border-b"></th>
+                <th className="py-2 px-6 border-b rounded-tl-lg w-1/3">Full Name</th>{/*  py - padding vertical y px - padding horizontal y border-b hace una línea inferior */}
+                <th className="py-2 px-6 border-b w-1/6">Phone Number</th>
+                <th className="py-2 px-4 border-b w-1/8">Job Title</th>
+                <th className="py-2 border-b w-1/8">Status</th>
+                <th className="border-b rounded-tr-lg w-1/20"></th>
               </tr>
             </thead>
             <tbody>
               {employees.map((user) => (
-                <tr key={user.id} className="text-center">{/* En React, cuando haces listas (.map() para crear elementos repetidos como filas de tabla), necesitas darle una key única a cada elemento. Key ayuda a identificar cada fila de manera única (cómo el id del usuario)*/}
-                  <td className="py-2 px-4 border-b">{user.FullName}</td>
-                  <td className="py-2 px-4 border-b">{user.Email}</td>
-                  <td className="py-2 px-4 border-b">{user.JobTitle}</td>
-                  <td className="py-2 px-4 border-b">
-                    {user.IsActive  ? "Active":"Inactive"}</td>
-                  <td className="py-2 px-4 border-b"> 
+                <tr key={user.ID}>{/* En React, cuando haces listas (.map() para crear elementos repetidos como filas de tabla), necesitas darle una key única a cada elemento. Key ayuda a identificar cada fila de manera única (cómo el id del usuario)*/}
+                  <td className="py-2 pl-8 pr-2 border-b last:rounded-bl-lg text-left border-gray-300">{user.FullName}<br/>
+                    <span className='text-gray-500'>{user.Email}</span></td>
+                  <td className="py-2 px-8 border-b border-gray-300">
+                    <span className="inline-block bg-gray-200 text-sm px-1 py-0.5 rounded-lg">{user.Phone}</span>
+                    </td>
+                  <td className="py-2 px-4 border-b border-gray-300">{user.JobTitle}<br/>
+                    <span className='text-gray-500'>{user.TypeContract}</span>
+                  </td>
+                  <td className="py-2 px-6 border-b border-gray-300">
+                    {user.IsActive  ? <span className="inline-block bg-green-100 text-sm px-1 py-0.5 rounded-lg text-green-800">• Active</span>:<span className="inline-block bg-red-100 text-sm px-1 py-0.5 rounded-lg text-red-800">• Inactive</span>}</td>
+                  <td className="py-2 px-4 border-b last:rounded-br-lg border-gray-300"> 
                     <button onClick={()=>handleClick(user.id)} className="white text-black px-4 py-2 rounded">
                       <FontAwesomeIcon icon={faEllipsisVertical} />
                     </button>
@@ -82,7 +269,7 @@ export default function EmployeesPage() {
           {mostrarModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded shadow-lg  relative">
-              <h2 className="text-xl font-bold mb-4">Perfil del Empleado</h2>
+              <h2 className="text-xl font-bold mb-4">Employee Profile</h2>
               <p><strong>Name:</strong> {empleadoSeleccionado.FullName}</p>
               <p><strong>Email:</strong> {empleadoSeleccionado.Email}</p>
               <p><strong>Job Title:</strong> {empleadoSeleccionado.JobTitle}</p>
@@ -125,7 +312,7 @@ export default function EmployeesPage() {
                 onClick={() => setMostrarModal(false)}
                 className="mt-4 bg-indigo-500 text-white px-4 py-2 rounded"
               >
-                Cerrar
+                Close
               </button>
             </div>
           </div>
