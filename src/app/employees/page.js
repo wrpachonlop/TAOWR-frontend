@@ -16,7 +16,28 @@ export default function EmployeesPage() {
     const [mostrarMenu, setMostrarMenu]=useState(null);
     const [employees, setEmployees] = useState([]);
     const [formData, setFormData] = useState({
-      fullName:"", email:"", phone:"", address: "", postalCode: "", driversLicense: "", sin: "", birthDate: "" , isAdmin: "" , isActive: "" , startDate: "" , jobTitle: "", typeContract: "", salary: "", institutionNo: "", accountNo: "",transitNo: "",bankAccountName: "",
+      fullName:"", 
+      email:"", 
+      phone:"", 
+      address: "", 
+      postalCode: "", 
+      driversLicense: "", 
+      sin: "", 
+      birthDate: "" , 
+      isAdmin: false , 
+      isActive: true , 
+      startDate: "" , 
+      jobTitle: "", 
+      typeContract: "", 
+      salary: "", 
+      institutionNo: "", 
+      accountNo: "",
+      transitNo: "",
+      bankAccountName: "",
+      emergencyContacts: [{Name: "", 
+                           Phone: "",
+                           Address: "",
+                           Relationship: ""}]
 
     });
     const handleClick = (id) => {
@@ -24,9 +45,10 @@ export default function EmployeesPage() {
       console.log(`Botón presionado ${id}`);
     };
     const handleChange = (e) => {
+      const {name,value,type,checked}=e.target;
       setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: type ==="checkbox" ? checked : value,
     });
     };
     const handleSubmit = async (e) => {
@@ -38,12 +60,9 @@ export default function EmployeesPage() {
       alert("Empleado guardado exitosamente");
       setNuevoeModal(false);
       } catch (error) {
-      console.log("Error al guardar:", error);
+      console.error("Error al guardar:", error.response?.data || error.message);
       alert("Hubo un error al guardar el empleado");
       }
-      await axios.post("https://taowr-backend.onrender.com/api/employees", formData);
-      const updatedList = await axios.get ("https://taowr-backend.onrender.com/api/employees");
-      setEmployees(updatedList.data);
     };
     const seleccionarOpcion = (idOption, empleado) => () => {
       console.log('Opción:', idOption);
@@ -83,14 +102,15 @@ export default function EmployeesPage() {
               </button>
           </div>
             {nuevoeModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-">
-                <div className="bg-white p-6 rounded shadow-lg w-full max-w-4xl">
-                  <h2 className="text-lg font-semibold mb-6">New Employee</h2>
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z- ">
+                <div className="bg-white p-6 rounded shadow-lg w-full max-w-4xl max-h-screen overflow-y-auto overflow-x-auto">
+                  <h1 className="text-lg font-bold mb-6">New Employee</h1>
                         <form onSubmit={(e) => {
                         handleSubmit(e);
                         setNuevoeModal(false);
                       }}>
-                          <div className="w-full my-10 grid grid-cols-2 gap-4">
+                          <div className="w-full my-10 grid grid-cols-2 gap-4 p-2">
+                            <h3 className="text-lg font-regular mb-6">Demographics</h3>
                             <div className='col-span-2'>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                             Full Name
@@ -184,7 +204,7 @@ export default function EmployeesPage() {
                           </div>
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Birth date
+                            Birth Date
                             </label>
                             <input
                               type="text"
@@ -195,6 +215,195 @@ export default function EmployeesPage() {
                               required
                             />
                           </div>
+                          <div className='py-8'>
+                            <label className="inline-flex items-center cursor-pointer">
+                              <span className='mr-2 text-sm font-medium text-gray-700'>Is the employee an admin?</span>
+                              <input
+                              type="checkbox"
+                              name="isAdmin"
+                              checked={formData.isAdmin}
+                              onChange={handleChange}
+                              className="sr-only"
+                              required
+                            />
+                                <div
+                                  className={`w-11 h-6 rounded-full relative transition-colors duration-300 ${
+                                    formData.isAdmin ? "bg-primary" : "bg-gray-300"
+                                  }`}
+                                >
+                                <div
+                                  className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-transform ${
+                                    formData.isAdmin ? "translate-x-6" : "translate-x-1"
+                                  }`}
+                                ></div>
+                              </div>
+                            </label>
+                          </div>
+                          <div className="col-span-2">
+                            <h3 className="text-lg font-regular mb-6">Company information</h3>
+                          </div>                          
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Start Date
+                            </label>
+                            <input
+                              type="text"
+                              name="startDate"
+                              value={formData.startDate}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Position
+                            </label>
+                            <input
+                              type="text"
+                              name="jobTitle"
+                              value={formData.jobTitle}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Type of contract
+                            </label>
+                            <input
+                              type="text"
+                              name="typeContract"
+                              value={formData.typeContract}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Salary
+                            </label>
+                            <input
+                              type="number"
+                              name="salary"
+                              value={formData.salary}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>
+                          <div className="col-span-2">
+                            <h3 className="text-lg font-regular mb-6 mt-4">Bank information</h3>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Institution Number
+                            </label>
+                            <input
+                              type="text"
+                              name="institutionNo"
+                              value={formData.institutionNo}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div> 
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Account Number
+                            </label>
+                            <input
+                              type="text"
+                              name="accountNo"
+                              value={formData.accountNo}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Transit Number
+                            </label>
+                            <input
+                              type="text"
+                              name="transitNo"
+                              value={formData.transitNo}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Bank Account Name
+                            </label>
+                            <input
+                              type="text"
+                              name="bankAccountName"
+                              value={formData.bankAccountName}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div> 
+                          <div className="col-span-2">
+                            <h3 className="text-lg font-regular mb-6 mt-4">Emergency Contact</h3>
+                          </div> 
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Emergency Contact Name
+                            </label>
+                            <input
+                              type="text"
+                              name="name"
+                              value={formData.emergencyContacts.name}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>   
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Emergency Contact Phone
+                            </label>
+                            <input
+                              type="text"
+                              name="phoneE"
+                              value={formData.emergencyContacts.phone}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Emergency Contact Address
+                            </label>
+                            <input
+                              type="text"
+                              name="addressE"
+                              value={formData.emergencyContacts.address}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>  
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Emergency Contact Relationship
+                            </label>
+                            <input
+                              type="text"
+                              name="relationship"
+                              value={formData.emergencyContacts.relationship}
+                              onChange={handleChange}
+                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                              required
+                            />
+                          </div>  
                         </div>
                         <div className="flex justify-end space-x-2">
                           <button
