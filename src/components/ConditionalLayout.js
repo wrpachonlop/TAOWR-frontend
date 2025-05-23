@@ -11,7 +11,6 @@ export default function ConditionalLayout({ children }) {
   const hideSidebarRoutes = ['/login', '/access-denied'];
 
   const user = session?.user;
-  console.log('User:', user);
 
   const today = new Date().toLocaleDateString('en-US', {
     weekday: 'long',

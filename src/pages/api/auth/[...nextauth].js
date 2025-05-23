@@ -21,7 +21,6 @@ export default NextAuth({
       return baseUrl; 
     },
     async session({ session, token, user }) {
-      console.log("Session callback:", { session, token, user });
       if (token.picture) {
         session.user.image = token.picture;
       }
@@ -29,7 +28,6 @@ export default NextAuth({
     },
     async jwt({ token, account, profile }) {
       // On initial sign in, add profile picture to JWT token
-      console.log("JWT callback:", { token, account, profile });
       if (profile?.picture) {
         token.picture = profile.picture;
       }
