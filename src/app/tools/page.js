@@ -2,6 +2,7 @@
 import React, {useState, useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisVertical, faPlus } from '@fortawesome/free-solid-svg-icons'
+import AddToolForm from '@/components/AddToolForm';
 import axios from "axios";
 export default function ToolsPage() {  
     const optionsForMenu = [
@@ -52,11 +53,27 @@ export default function ToolsPage() {
       console.log(`seleccionaste: ${idOption}`);
       setMostrarMenu(false);
     };
+
+  async function handleAddTool(formData) {
+    console.log("Form data submitted:", formData);
+    // try {
+    //   const res = await fetch("/api/tools", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(formData),
+    //   });
+
+    //   if (!res.ok) throw new Error("Failed to add tool");
+
+    //   alert("Tool added!");
+    //   setShowForm(false);
+    //   // Optionally: refresh tool list
+    // } catch (err) {
+    //   console.error(err);
+    //   alert("Failed to save.");
+    // }
+  }
   
-  /*const employees=[ //Estoy creando las tablas con la información de los empleados
-    { id: 1, CreatedAt : '2025-05-03', UpdatedAt: '2025-05-03', DeletedAt: null, FullName:'Niko Montemayor', Email:'niko@theartofwildroots.com', Phone:'123-456-7890', Address: '123 Main St' , PostalCode: 'V5K0A1' , DriversLicense: 'D1234567' , SIN: '123456789' , BirthDate: '1990-01-01' , IsAdmin: false , IsActive: true , StartDate: "2024-05-01" , JobTitle: 'Owner', TypeContract: 'Full-time', Salary: 50000, InstitutionNo: "001", AccountNo: "123456789",TransitNo: "00011",BankAccountName: "John Doe",Tools: [], Trucks: [],EmergencyContacts: [{ID: 1,CreatedAt: "2025-05-03T17:12:18.716121Z",UpdatedAt: "2025-05-03T17:12:18.716121Z",DeletedAt: null,EmployeeID: 1,Name: "Jane Doe", Phone: "987-654-3210",Address: "456 Another Street",Relationship: "Spouse"}]},
-    { id: 2, CreatedAt : '2025-05-03', UpdatedAt: '2025-05-03',DeletedAt: null, FullName:'Lourdes Hugo', Email:'lou@theartofwildroots.com', Phone:'123-456-7890', Address: '123 Main St' , PostalCode: 'V5K0A1' , DriversLicense: 'D1234567' , SIN: '123456789' , BirthDate: '1990-01-01' , IsAdmin: false , IsActive: false ,StartDate: "2024-05-01" , JobTitle: 'CEO', TypeContract: 'Full-time', Salary: 50000, InstitutionNo: "001",AccountNo: "123456789",TransitNo: "00011",BankAccountName: "John Doe",Tools: [],Trucks: [],EmergencyContacts: [{ID: 1,CreatedAt: "2025-05-03T17:12:18.716121Z",UpdatedAt: "2025-05-03T17:12:18.716121Z",DeletedAt: null,EmployeeID: 1,Name: "Jane Doe", Phone: "987-654-3210",Address: "456 Another Street",Relationship: "Spouse"}]},
-  ];*/ 
   useEffect(() =>{
     const fetchTools = async()=> {
       try {
@@ -69,6 +86,8 @@ export default function ToolsPage() {
 
     fetchTools();
   },[]
+
+  
   );     
     return (
       <div className="p-8 m-8">
@@ -79,138 +98,7 @@ export default function ToolsPage() {
               </button>
           </div>
             {nuevoeModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-">
-                <div className="bg-white p-6 rounded shadow-lg w-full max-w-4xl">
-                  <h2 className="text-lg font-semibold mb-6">New Employee</h2>
-                        <form onSubmit={(e) => {
-                        handleSubmit(e);
-                        setNuevoeModal(false);
-                      }}>
-                          <div className="w-full my-10 grid grid-cols-2 gap-4">
-                            <div className='col-span-2'>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Name
-                            </label>
-                            <input
-                              type="text"
-                              name="fullName"
-                              value={formData.fullName}
-                              onChange={handleChange}
-                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
-                              required
-                            />
-                          </div>
-                          <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Brand
-                          </label>
-                          <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
-                            required
-                          />
-                          </div>
-                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Phone Number
-                            </label>
-                            <input
-                              type="text"
-                              name="phone"
-                              value={formData.phone}
-                              onChange={handleChange}
-                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
-                              required
-                            />
-                          </div>                                               
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Address
-                            </label>
-                            <input
-                              type="text"
-                              name="address"
-                              value={formData.address}
-                              onChange={handleChange}
-                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
-                              required
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Postal Code
-                            </label>
-                            <input
-                              type="text"
-                              name="postalCode"
-                              value={formData.postalCode}
-                              onChange={handleChange}
-                              className="w-1/2 border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
-                              required
-                            />
-                          </div>
-                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                            SIN Number
-                            </label>
-                            <input
-                              type="text"
-                              name="sin"
-                              value={formData.sin}
-                              onChange={handleChange}
-                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
-                              required
-                            />
-                          </div>   
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Driver License Number
-                            </label>
-                            <input
-                              type="text"
-                              name="driverLicense"
-                              value={formData.driversLicense}
-                              onChange={handleChange}
-                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
-                              required
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Birth date
-                            </label>
-                            <input
-                              type="text"
-                              name="birthDate"
-                              value={formData.birthDate}
-                              onChange={handleChange}
-                              className="w-full border border-gray-400 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
-                              required
-                            />
-                          </div>
-                        </div>
-                        <div className="flex justify-end space-x-2">
-                          <button
-                            type="button"
-                            onClick={() => setNuevoeModal(false)}
-                            className="px-4 py-2 bg-gray-300 text-gray-700 rounded"
-                          >
-                            Cancel
-                          </button>
-
-                          <button
-                            type="submit"
-                            className="px-4 py-2 bg-primary text-white rounded"
-                          >
-                            Save
-                          </button>
-                        </div>
-                      </form>
-                </div>
-              </div>
+               <AddToolForm onClose={() => setNuevoeModal(false)} />
             )}
           <div className=" rounded-lg overflow-x-auto p-4">  {/* permite hacer scroll si la tabla es muy ancha */}
           <table className="min-w-full bg-white border border-gray-200 mt-8">{/*  crea la tabla con todo el ancho disponible con fondo blanco y borde gris*/}
@@ -241,10 +129,10 @@ export default function ToolsPage() {
       
                   </td>
                   <td className="py-2 px-4 border-b last:rounded-br-lg border-gray-300"> 
-                    <button onClick={()=>handleClick(tool.id)} className="white text-black px-4 py-2 rounded">
+                    <button onClick={()=>handleClick(tool.ID)} className="white text-black px-4 py-2 rounded">
                       <FontAwesomeIcon icon={faEllipsisVertical} />
                     </button>
-                    {mostrarMenu === tool.id && (
+                    {mostrarMenu === tool.ID && (
                       <div className='mt-2 bg-white border rounded shadow-lg absolute z-10'>
                         <ul className="text-sm text-gray-700">
                           {optionsForMenu.map((option) =>(
